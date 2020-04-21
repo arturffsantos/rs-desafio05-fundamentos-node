@@ -18,6 +18,16 @@ class CreateTransactionService {
       throw Error('Invalid transaction type');
     }
 
+    if (type === 'outcome') {
+      const {
+        total: currentBalance,
+      } = this.transactionsRepository.getBalance();
+
+      if (currentBalance - value < 0) {
+        throw Error('Insuficient funds');
+      }
+    }
+
     return this.transactionsRepository.create({ title, value, type });
   }
 }
